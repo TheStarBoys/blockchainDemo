@@ -1,6 +1,9 @@
 package main
 
-import "time"
+import (
+	"crypto/sha256"
+	"time"
+)
 
 type Block struct {
 	Version			int64
@@ -14,15 +17,17 @@ type Block struct {
 }
 // new新区块
 func NewBlock(data string, prevHash []byte) *Block {
+	// 目前MerkleRoot 由粗略的hash运算得到
+	mr := sha256.Sum256([]byte(data))
 	block := Block{
 		Version:1,
 		PrevBlockHash:prevHash,
-		MerkleRoot:[]byte{},
+		MerkleRoot:mr[:],
 		TimeStamp:time.Now().UnixNano(),
 		Bits:targetBits,
 		Data:[]byte(data),
 	}
-	// Nonce, hash 通过挖矿找 TODO
+	// Nonce, hash 通过挖矿找
 	pow := NewPoW(&block)
 	pow.Mining()
 	return &block
