@@ -6,14 +6,14 @@ import (
 )
 
 type Block struct {
-	Version			int64
-	PrevBlockHash	[]byte
-	Hash 			[]byte
-	MerkleRoot		[]byte
-	TimeStamp		int64
-	Bits			int64
-	Nonce			int64
-	Data 			[]byte
+	Version			int64		`json "version""`
+	PrevBlockHash	[]byte		`json "prevBlock"`
+	Hash 			[]byte		`json "hash"`
+	MerkleRoot		[]byte		`json "merkleRoot"`
+	TimeStamp		int64		`json "timeStamp"`
+	Bits			int64		`json "bits"`
+	Nonce			int64		`json "nonce"`
+	Data 			[]byte		`json "data"`
 }
 // new新区块
 func NewBlock(data string, prevHash []byte) *Block {
