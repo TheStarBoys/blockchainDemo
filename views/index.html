@@ -92,8 +92,10 @@
             Guide you to understand how blockchain works.<br>
         </p>
     </div>
+
     {{/*GENESIS BLOCK*/}}
-    <div class="block" onload="loadGenesisHash()">
+    {{with .Genesis}}
+    <div class="block" onload="">
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">DATA</span>
             <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1"
@@ -102,39 +104,19 @@
         <p style="margin-top: 22px" class="ft-size-12">PREVIOUS HASH
             <span class="label label-info">0</span>
         </p>
-        <p style="margin-top: 10px" class="ft-size-12">HASH <span class="label label-info">{{LoadGenesisHash}}</span>
+        <p style="margin-top: 10px" class="ft-size-12">HASH <span class="label label-info">0x{{.Hash | printf "%x"}}</span>
         </p>
         <div class="clearfix" style="height: 54px">
             <h3 class="pull-left">GENESIS BLOCK
-                <small style="font-size: 8pt;" class="ant-card">on Tue, 17 Oct 2017 19:53:20 GMT</small>
+                <small style="font-size: 8pt;" class="ant-card">{{.TimeStamp}}</small>
             </h3>
-            <span class="label label-info pull-right" style="margin-top: 26px;">604</span>
+            <span class="label label-info pull-right" style="margin-top: 26px;">{{.Nonce}}</span>
         </div>
     </div>
+    {{end}}
     {{/*BLOCK# BEGIN*/}}
     {{/*隐藏域 用于传递数据*/}}
-    <span id="span-hidden1" style="visibility: hidden"></span>
-    <span id="span-hidden3">
-
-    </span>
-
-    <span id="span-hidden2" style="visibility: hidden"></span>
-    {{/*BLOCK END*/}}
-    <div class="add-block">
-        <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">DATA</span>
-            <input type="text" id="addData" class="form-control" placeholder="" aria-describedby="basic-addon1"
-                   value="{{.addData}}" name="addData">
-        </div>
-        <button class="btn-addblock" onclick="addBlock()" style="color: #fff;">ADD NEW BLOCK</button>
-    </div>
-</div>
-<script>
-    const blockHTML = `
-    \{\{if .\}\}
-    <p>There is not object</p>
-    \{\{end\}\}
-    <span style="visibility: hidden">\{\{range .blocks\}\}</span>
+    {{range $i, $b := .Blocks}}
     <div style="text-align: center;">
         <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"
               style="font-size: 40px; color: rgba(0,0,0,0.5);"></span>
@@ -143,43 +125,36 @@
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">DATA</span>
             <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1"
-                   value="Welcome to Blockchain Demo by TheStarBoys">
+                   value="{{.Data | printf "%s"}}">
         </div>
-        <p style="margin-top: 22px" class="ft-size-12">PREVIOUS HASH <span class="label label-info">{{.PrevBlockHash}}</span></p>
-        <p style="margin-top: 10px" class="ft-size-12">HASH <span class="label label-info">{{.Hash}}</span>
+        <p style="margin-top: 22px" class="ft-size-12">PREVIOUS HASH <span class="label label-info">0x{{.PrevBlockHash | printf "%x"}}</span></p>
+        <p style="margin-top: 10px" class="ft-size-12">HASH <span class="label label-info">0x{{.Hash | printf "%x"}}</span>
         </p>
         <div class="clearfix" style="height: 54px">
-            <h3 class="pull-left">BLOCK#1
-                <small style="font-size: 8pt;" class="ant-card">on Tue, 17 Oct 2017 19:53:20 GMT</small>
+            {{/*executing "index.html" at <AddOne>: wrong type for value; expected string; got int*/}}
+            <h3 class="pull-left">BLOCK#{{$i | AddOne}}
+                <small style="font-size: 8pt;" class="ant-card">{{.TimeStamp}}</small>
             </h3>
-            <span class="label label-info pull-right" style="margin-top: 26px;">604</span>
+            <span class="label label-info pull-right" style="margin-top: 26px;">{{.Nonce}}</span>
         </div>
     </div>
-    <span style="visibility: hidden">\{\{end\}\}</span>`;
-    // 添加区块传递数据的函数
-    function addBlock() {
-        var addData = document.getElementById("addData").value;
-        console.log(addData);   // 得到了addData输入框里的值
-        var json = {{AddBlockData "addData"}};    // 返回的是一个json
-        var obj = JSON.parse(json); // 解析json得到对象
-        console.log("obj is ----:", obj.Blocks[0].Version);
-        document.getElementById("span-hidden1").innerHTML = "\{\{with " + obj.Blocks + "\}\}";
-        document.getElementById("span-hidden2").innerHTML = "\{\{end\}\}";
-        //alert(typeof blockHTML);
-        // 遍历json对象，得到其中我们需要的属性值
-        for (var i = 0; i <obj.Blocks.length;i++) {
-            var block = obj.Blocks[i];
-            var prevhash = block.PrevBlockHash;
-            var hash    = block.Hash;
-            console.log(obj.Blocks.length);
-            console.log("for - in obj ----", prevhash + " ", hash);
-        }
-        document.getElementById("span-hidden3").innerHTML = blockHTML;
-    }
-    // 加载时，获得GenesisBlock的hash
-    function loadGenesisHash() {
+    {{end}}
+    {{/*BLOCK END*/}}
+    {{/*添加区块的form部分*/}}
+    <form action="" method="post" target="">
+        <div class="add-block">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">DATA</span>
+                <input type="text" id="addData" class="form-control" placeholder="" aria-describedby="basic-addon1"
+                       value="" name="addData">
+            </div>
+            <button class="btn-addblock" type="submit" style="color: #fff;">ADD NEW BLOCK</button>
+        </div>
+    </form>
+    <iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
 
-    }
+</div>
+<script>
 
 </script>
 
