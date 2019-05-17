@@ -25,15 +25,24 @@
             padding: 40px 15px;
             text-align: center;
         }
-
+        .fixed-turn {
+            position: fixed;
+            top: 140px;
+            left: 100px;
+            color: #fff;
+            font-weight: 700;
+        }
+        .btn-addblock:hover {
+            background-color: lightblue;
+        }
         .block {
-            width: 600px;
+            width: 620px;
             height: 225px;
             margin: 20px auto;
             background-color: #fff;
             padding: 32px;
             border-radius: 10px;
-            box-shadow: 0px 1px 7px 1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 7px 1px rgba(0, 0, 0, 0.1);
         }
         .add-block {
             width: 330px;
@@ -42,7 +51,13 @@
             background-color: #fff;
             padding: 32px 46px;
             border-radius: 10px;
-            box-shadow: 0 5px 13px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px -2px rgba(10,16,34,.4)
+        }
+        .block:hover {
+            box-shadow: 0 0 50px 10px rgba(0, 0, 0, 0.1)
+        }
+        .add-block:hover {
+            box-shadow: 0 0 50px 10px rgba(0, 0, 0, 0.1)
         }
         .btn-addblock {
             width: 168px;
@@ -52,12 +67,22 @@
             margin: 30px auto 0 auto;
             display: block;
             border: none;
+            outline: none;
+            font-weight: 700;
         }
         .ft-size-12 {
             font-size: 12px;
         }
         .ant-card {
             color: rgba(0, 0, 0, 0.3);
+        }
+        .ant-tag-green {
+            color: #52c41a;
+            background: #f6ffed;
+            display: inline-block;
+            border: 1px solid #b7eb8f;
+            padding: 0 7px;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -83,6 +108,10 @@
         </div>
     </div>
 </nav>
+{{/*跳转到最新区块*/}}
+<a href="#last-block">
+    <input type="button" class="fixed-turn btn-addblock" value="THE LATEST BLOCK">
+</a>
 <div class="container">
     <div class="starter-template">
         <h1 style="font-family: DINPro,-apple-system,BlinkMacSystemFont,
@@ -99,12 +128,12 @@
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">DATA</span>
             <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1"
-                   value="Welcome to Blockchain Demo by TheStarBoys">
+                   value="{{.Data | printf "%s"}}">
         </div>
         <p style="margin-top: 22px" class="ft-size-12">PREVIOUS HASH
-            <span class="label label-info">0</span>
+            <span style="color: #52c41a;">0</span>
         </p>
-        <p style="margin-top: 10px" class="ft-size-12">HASH <span class="label label-info">0x{{.Hash | printf "%x"}}</span>
+        <p style="margin-top: 10px" class="ft-size-12">HASH <span class="ant-tag-green">0x{{.Hash | printf "%x"}}</span>
         </p>
         <div class="clearfix" style="height: 54px">
             <h3 class="pull-left">GENESIS BLOCK
@@ -124,15 +153,15 @@
     <div class="block">
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">DATA</span>
-            <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1"
+            <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" onchange="dataChange()"
                    value="{{.Data | printf "%s"}}">
         </div>
-        <p style="margin-top: 22px" class="ft-size-12">PREVIOUS HASH <span class="label label-info">0x{{.PrevBlockHash | printf "%x"}}</span></p>
-        <p style="margin-top: 10px" class="ft-size-12">HASH <span class="label label-info">0x{{.Hash | printf "%x"}}</span>
+        <p style="margin-top: 22px" class="ft-size-12">PREVIOUS HASH <span style="color: #52c41a;">0x{{.PrevBlockHash | printf "%x"}}</span></p>
+        <p style="margin-top: 10px" class="ft-size-12">HASH <span class="ant-tag-green" style="color: #52c41a;">0x{{.Hash | printf "%x"}}</span>
         </p>
         <div class="clearfix" style="height: 54px">
             {{/*executing "index.html" at <AddOne>: wrong type for value; expected string; got int*/}}
-            <h3 class="pull-left">BLOCK#{{$i | AddOne}}
+            <h3 class="pull-left">BLOCK #{{$i | AddOne}}
                 <small style="font-size: 8pt;" class="ant-card">{{.TimeStamp}}</small>
             </h3>
             <span class="label label-info pull-right" style="margin-top: 26px;">{{.Nonce}}</span>
@@ -152,10 +181,12 @@
         </div>
     </form>
     <iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
-
+    <a id="last-block"></a>
 </div>
 <script>
-
+    // 当block的input内容改变时
+    function dataChange() {
+    }
 </script>
 
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
