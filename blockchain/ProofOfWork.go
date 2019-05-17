@@ -1,4 +1,4 @@
-package main
+package blockchain
 
 import (
 	"bytes"
@@ -8,7 +8,7 @@ import (
 	"math/big"
 )
 // 前导零(二进制)
-const targetBits = 8
+const targetBits = 16
 type ProofOfWork struct {
 	block 	*Block
 	target	*big.Int		// 目标值, 因为hash是256位

@@ -1,4 +1,4 @@
-package main
+package blockchain
 
 import (
 	"crypto/sha256"
@@ -34,5 +34,5 @@ func NewBlock(data string, prevHash []byte) *Block {
 }
 // new创世快
 func NewGenesisBlock() *Block{
-	return NewBlock("The blockchain demo by TheStarBoy " + time.Now().Format("2006-01-02 15:04:05"),[]byte{})
+	return NewBlock("Welcome to Blockchain Demo by TheStarBoys" /*+ time.Now().Format(time.UnixDate)*/,[]byte{})
 }
