@@ -90,6 +90,10 @@
             width: 300px;
             height: auto;
         }
+        .tx {
+            border: 1px solid pink;
+            padding: 0 0 0 5px;
+        }
     </style>
 </head>
 <body>
@@ -152,42 +156,46 @@
     <div class="block" onload="">
     {{/* SEND BTC FROM "" TO ""*/}}
     {{range $txs}}
-    {{/* inputs */}}
-        <table class="table">
-            <caption>Input</caption>
-            <thead>
-            <tr>
-                <th>TXID</th>
-                <th>ScriptSig</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{range .TXInputs}}
-            <tr>
-                <td style="font-size: 12px">{{.TXID | printf "%x"}}</td>
-                <td>{{.ScriptSig}}</td>
-            </tr>
-            {{end}}
-            </tbody>
-        </table>
-    {{/* outputs*/}}
-        <table class="table">
-            <caption>Output</caption>
-            <thead>
-            <tr>
-                <th>Value</th>
-                <th>ScriptPubKey</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{range .TXOutputs}}
-            <tr>
-                <td style="font-size: 12px">{{.Value}}</td>
-                <td>{{.ScriptPubKey}}</td>
-            </tr>
-            {{end}}
-            </tbody>
-        </table>
+        <span>TXID: {{.TXID | printf "0x%x"}}</span>
+        <div class="tx">
+        {{/* inputs */}}
+            <table class="table">
+                <caption>Input</caption>
+                <thead>
+                <tr>
+                    <th>TXID</th>
+                    <th>ScriptSig</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{range .TXInputs}}
+                <tr>
+                    <td style="font-size: 12px">{{.TXID | printf "%x"}}</td>
+                    <td>{{.ScriptSig}}</td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+        {{/* outputs*/}}
+            <table class="table">
+                <caption>Output</caption>
+                <thead>
+                <tr>
+                    <th>Value</th>
+                    <th>ScriptPubKey</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{range .TXOutputs}}
+                <tr>
+                    <td style="font-size: 12px">{{.Value}}</td>
+                    <td>{{.ScriptPubKey}}</td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+        </div>
+
     {{end}}
         <p style="margin-top: 22px" class="ft-size-12">PREVIOUS HASH
             <span style="color: #52c41a;">0</span>
@@ -212,44 +220,47 @@
     <div class="block">
         {{/* SEND BTC FROM "" TO ""*/}}
         {{range .Transactions}}
-        {{/* inputs */}}
-        <table class="table">
-            <caption>Input</caption>
-            <thead>
-            <tr>
-                <th>TXID</th>
-                <th>ScriptSig</th>
-            </tr>
-            </thead>
-            <tbody>
+            <span>TXID: {{.TXID | printf "0x%x"}}</span>
+            <div class="tx">
+            {{/* inputs */}}
+            <table class="table">
+                <caption>Input</caption>
+                <thead>
+                <tr>
+                    <th>TXID</th>
+                    <th>ScriptSig</th>
+                </tr>
+                </thead>
+                <tbody>
 
-            {{range .TXInputs}}
-            <tr>
-                <td style="font-size: 12px">{{.TXID | printf "%x"}}</td>
-                <td>{{.ScriptSig}}</td>
-            </tr>
-            {{end}}
-            </tbody>
+                {{range .TXInputs}}
+                <tr>
+                    <td style="font-size: 12px">{{.TXID | printf "%x"}}</td>
+                    <td>{{.ScriptSig}}</td>
+                </tr>
+                {{end}}
+                </tbody>
 
-        </table>
-        {{/* outputs*/}}
-        <table class="table">
-            <caption>Output</caption>
-            <thead>
-            <tr>
-                <th>Value</th>
-                <th>ScriptPubKey</th>
-            </tr>
-            </thead>
-        <tbody>
-        {{range .TXOutputs}}
-        <tr>
-            <td style="font-size: 12px">{{.Value}}</td>
-            <td>{{.ScriptPubKey}}</td>
-        </tr>
-        {{end}}
-        </tbody>
-        </table>
+            </table>
+            {{/* outputs*/}}
+            <table class="table">
+                <caption>Output</caption>
+                <thead>
+                <tr>
+                    <th>Value</th>
+                    <th>ScriptPubKey</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{range .TXOutputs}}
+                <tr>
+                    <td style="font-size: 12px">{{.Value}}</td>
+                    <td>{{.ScriptPubKey}}</td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+        </div>
         {{end}}
         <p style="margin-top: 22px" class="ft-size-12">PREVIOUS HASH <span style="color: #52c41a;">0x{{.PrevBlockHash | printf "%x"}}</span></p>
         <p style="margin-top: 10px" class="ft-size-12">HASH <span class="ant-tag-green" style="color: #52c41a;">0x{{.Hash | printf "%x"}}</span>
