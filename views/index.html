@@ -103,6 +103,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="/block">Block</a></li>
                 <li class="active"><a href="/blockchain">Blockchain</a></li>
+                <li><a href="/transaction">Transaction</a></li>
                 <li><a href="#About">About</a></li>
                 <li><a href="https://github.com/TheStarBoys/blockchainDemo" target="_blank">MyProject</a></li>
             </ul>
@@ -138,7 +139,7 @@
         </p>
         <div class="clearfix" style="height: 54px">
             <h3 class="pull-left">GENESIS BLOCK
-                <small style="font-size: 8pt;" class="ant-card">{{.TimeStamp}}</small>
+                <small style="font-size: 8pt;" class="ant-card">{{.TimeStamp | TimeStamp2Time}}</small>
             </h3>
             <span class="label label-info pull-right" style="margin-top: 26px;">{{.Nonce}}</span>
         </div>
@@ -163,7 +164,7 @@
         <div class="clearfix" style="height: 54px">
             {{/*executing "index.html" at <AddOne>: wrong type for value; expected string; got int*/}}
             <h3 class="pull-left">BLOCK #{{$i | AddOne}}
-                <small style="font-size: 8pt;" class="ant-card">{{.TimeStamp}}</small>
+                <small style="font-size: 8pt;" class="ant-card">{{.TimeStamp | TimeStamp2Time}}</small>
             </h3>
             <span class="label label-info pull-right" style="margin-top: 26px;">{{.Nonce}}</span>
         </div>

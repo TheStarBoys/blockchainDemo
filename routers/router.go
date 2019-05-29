@@ -12,4 +12,7 @@ func init() {
 
     // block页面
     beego.Router("/block", &controllers.BlockController{})
+
+    // transaction页面
+    beego.Router("/transaction", &controllers.TransactionController{})
 }
