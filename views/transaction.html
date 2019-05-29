@@ -122,33 +122,31 @@
             Let you know, how does blockchain deliver value.<br>
         </p>
     </div>
-
 {{/*GENESIS BLOCK*/}}
 {{with .Genesis}}
+{{$txs := .Transactions}}
     <div class="block" onload="">
-        {{/* SEND BTC FROM "" TO ""*/}}
-        {{/* inputs */}}
+    {{/* SEND BTC FROM "" TO ""*/}}
+    {{range $txs}}
+    {{/* inputs */}}
         <table class="table">
             <caption>Input</caption>
             <thead>
-                <tr>
-                    <th>TXID</th>
-                    <th>ScriptSig</th>
-                </tr>
+            <tr>
+                <th>TXID</th>
+                <th>ScriptSig</th>
+            </tr>
             </thead>
             <tbody>
-            {{range .Transactions}}
-                {{range .TXInputs}}
-                    <tr>
-                        <td style="font-size: 12px">{{.TXID | printf "%x"}}</td>
-                        <td>{{.ScriptSig}}</td>
-                    </tr>
-                {{end}}
+            {{range .TXInputs}}
+            <tr>
+                <td style="font-size: 12px">{{.TXID | printf "%x"}}</td>
+                <td>{{.ScriptSig}}</td>
+            </tr>
             {{end}}
             </tbody>
-
         </table>
-        {{/* outputs*/}}
+    {{/* outputs*/}}
         <table class="table">
             <caption>Output</caption>
             <thead>
@@ -158,16 +156,15 @@
             </tr>
             </thead>
             <tbody>
-            {{range .Transactions}}
-                {{range .TXOutputs}}
-                <tr>
-                    <td style="font-size: 12px">{{.Value}}</td>
-                    <td>{{.ScriptPubKey}}</td>
-                </tr>
-                {{end}}
-            </tbody>
+            {{range .TXOutputs}}
+            <tr>
+                <td style="font-size: 12px">{{.Value}}</td>
+                <td>{{.ScriptPubKey}}</td>
+            </tr>
             {{end}}
+            </tbody>
         </table>
+    {{end}}
         <p style="margin-top: 22px" class="ft-size-12">PREVIOUS HASH
             <span style="color: #52c41a;">0</span>
         </p>
@@ -190,6 +187,7 @@
     </div>
     <div class="block">
         {{/* SEND BTC FROM "" TO ""*/}}
+        {{range .Transactions}}
         {{/* inputs */}}
         <table class="table">
             <caption>Input</caption>
@@ -200,13 +198,12 @@
             </tr>
             </thead>
             <tbody>
-            {{range .Transactions}}
+
             {{range .TXInputs}}
             <tr>
                 <td style="font-size: 12px">{{.TXID | printf "%x"}}</td>
                 <td>{{.ScriptSig}}</td>
             </tr>
-            {{end}}
             {{end}}
             </tbody>
 
@@ -221,7 +218,6 @@
             </tr>
             </thead>
         <tbody>
-        {{range .Transactions}}
         {{range .TXOutputs}}
         <tr>
             <td style="font-size: 12px">{{.Value}}</td>
@@ -229,8 +225,8 @@
         </tr>
         {{end}}
         </tbody>
-        {{end}}
         </table>
+        {{end}}
         <p style="margin-top: 22px" class="ft-size-12">PREVIOUS HASH <span style="color: #52c41a;">0x{{.PrevBlockHash | printf "%x"}}</span></p>
         <p style="margin-top: 10px" class="ft-size-12">HASH <span class="ant-tag-green" style="color: #52c41a;">0x{{.Hash | printf "%x"}}</span>
         </p>
@@ -245,7 +241,7 @@
 {{end}}
 {{/*BLOCK END*/}}
 {{/*添加区块的form部分*/}}
-    <form action="" method="post" target="">
+    <form action="/transaction#last-block" method="post" target="">
         <div class="add-block">
             {{/* SEND BTC FROM "" TO ""*/}}
             <div class="row">
