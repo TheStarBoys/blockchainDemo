@@ -1,7 +1,6 @@
 package main
 
 import (
-
 	_ "blockchainDemo/controllers"
 	_ "blockchainDemo/routers"
 	"github.com/astaxie/beego"

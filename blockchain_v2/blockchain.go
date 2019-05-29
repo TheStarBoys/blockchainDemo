@@ -188,7 +188,7 @@ func (bc *BlockChain) FindUTXO(address string) []TXOutput {
 	return UTXOs
 }
 //获取余额
-func (bc *BlockChain)GetBalance(address string) {
+func (bc *BlockChain)GetBalance(address string) (balance float64){
 	//获取没有消费过的utxo集合
 	utxos := bc.FindUTXO(address)
 	var total float64 = 0	//总金额
@@ -197,6 +197,7 @@ func (bc *BlockChain)GetBalance(address string) {
 		total += utxo.Value
 	}
 	fmt.Printf("The Balance of %s is %f\n",address,total)
+	return total
 }
 // 进行转账
 func (bc *BlockChain)Send(from, to string, amount float64) {

@@ -83,6 +83,13 @@
             padding: 0 7px;
             font-size: 12px;
         }
+        .tb-get-balance {
+            position: fixed;
+            top: 340px;
+            left: 100px;
+            width: 300px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -113,6 +120,23 @@
 <a href="#last-block">
     <input type="button" class="fixed-turn btn-addblock" value="THE LATEST BLOCK">
 </a>
+{{/* Get Balance*/}}
+<table class="table tb-get-balance table-hover table-bordered">
+    <thead>
+    <tr>
+        <th>Account</th>
+        <th>Balance</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{range $i, $account := .accounts}}
+    <tr>
+        <td>{{$account.Name}}</td>
+        <td>{{$account.Amount}}$</td>
+    </tr>
+    {{end}}
+    </tbody>
+</table>
 <div class="container">
     <div class="starter-template">
         <h1 style="font-family: DINPro,-apple-system,BlinkMacSystemFont,
@@ -249,21 +273,21 @@
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1">BTC</span>
                         <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1"
-                               value="5" name="amount">
+                               value="{{if ne .money 0.0}}{{.money}}{{else}}5{{end}}" name="amount">
                     </div>
                 </div>
                 <div class="col-xs-4">
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1">FROM</span>
                         <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1"
-                               value="Alice" name="from">
+                               value="{{if ne .from ""}}{{.from}}{{else}}Alice{{end}}" name="from">
                     </div>
                 </div>
                 <div class="col-xs-4">
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1">TO</span>
                         <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1"
-                               value="Bob" name="to">
+                               value="{{if ne .to ""}}{{.to}}{{else}}Bob{{end}}" name="to">
                     </div>
                 </div>
             </div>
@@ -273,14 +297,14 @@
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1">MINER</span>
                         <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1"
-                               value="Alice" name="miner">
+                               value="{{if ne .miner ""}}{{.miner}}{{else}}Alice{{end}}" name="miner">
                     </div>
                 </div>
                 <div class="col-xs-8">
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1">DATA</span>
                         <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1"
-                               value="reward to Alice 12.5 BTC" name="data">
+                               value="{{if ne .data ""}}{{.data}}{{else}}reward to Alice 12.5 BTC{{end}}" name="data">
                     </div>
                 </div>
             </div>
