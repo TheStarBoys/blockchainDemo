@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"blockchainDemo/controllers"
+	"github.com/TheStarBoys/blockchainDemo/controllers"
 	"github.com/astaxie/beego"
 )
 

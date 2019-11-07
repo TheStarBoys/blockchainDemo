@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"blockchainDemo/blockchain_v2"
-	"blockchainDemo/models"
+	"github.com/TheStarBoys/blockchainDemo/blockchain_v2"
+	"github.com/TheStarBoys/blockchainDemo/models"
 	"github.com/astaxie/beego"
 )
 
