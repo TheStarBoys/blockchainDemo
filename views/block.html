@@ -141,7 +141,7 @@
     function digestMessage(message) {
     var encoder = new TextEncoder();
     var data = encoder.encode(message);
-    return window.crypto.subtle.digest('SHA-256', data);
+    return crypto.subtle.digest('SHA-256', data);
     }
 
     // digestMessage(text).then(digestValue => {
