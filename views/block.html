@@ -118,31 +118,35 @@
         // 要进行hash运算的数据
         var text = data.value;
         console.log(text);
-        digestMessage(text).then(digestValue => {
-            console.log(hexString(digestValue));
-            hash.innerHTML = "0x" + hexString(digestValue);
-        });
+        // 原有方法不支持非https协议下运行
+        // digestMessage(text).then(digestValue => {
+        //     console.log(hexString(digestValue));
+        //     hash.innerHTML = "0x" + hexString(digestValue);
+        // });
+        const sha = hex_sha256(text);
+        hash.innerHTML = "0x" + sha;
+        console.log(sha);
     }
     // 将byteArray转为十六进制显示
-    function hexString(buffer) {
-    var byteArray = new Uint8Array(buffer);
+    // function hexString(buffer) {
+    // var byteArray = new Uint8Array(buffer);
+    //
+    // var hexCodes = [...byteArray].map(value => {
+    // var hexCode = value.toString(16);
+    // var paddedHexCode = hexCode.padStart(2, '0');
+    // return paddedHexCode;
+    // });
 
-    var hexCodes = [...byteArray].map(value => {
-    var hexCode = value.toString(16);
-    var paddedHexCode = hexCode.padStart(2, '0');
-    return paddedHexCode;
-    });
-
-    return hexCodes.join('');
-    }
+    // return hexCodes.join('');
+    // }
     // 要进行hash运算的数据
     // var text = 'Welcome to Blockchain Demo by TheStarBoys';
     // 进行hash运算
-    function digestMessage(message) {
-    var encoder = new TextEncoder();
-    var data = encoder.encode(message);
-    return crypto.subtle.digest('SHA-256', data);
-    }
+    // function digestMessage(message) {
+    // var encoder = new TextEncoder();
+    // var data = encoder.encode(message);
+    // return window.crypto.subtle.digest('SHA-256', data);
+    // }
 
     // digestMessage(text).then(digestValue => {
     // console.log(hexString(digestValue));
@@ -153,5 +157,6 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script src="../static/js/bootstrap.min.js"></script>
+<script src="../static/js/SHA-256.js"></script>
 </body>
 </html>
