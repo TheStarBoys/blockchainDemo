@@ -15,4 +15,6 @@ func init() {
 
     // transaction页面
     beego.Router("/transaction", &controllers.TransactionController{})
+
+    beego.Router("/merkleTree", &controllers.MerkleTreeController{})
 }

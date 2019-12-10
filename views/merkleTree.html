@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Blockchain Demo</title>
+    <!-- Bootstrap -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        body {
+            padding-top: 50px;
+            background-color: #f9f9ff;
+        }
+
+        .starter-template {
+            padding: 40px 15px;
+            text-align: center;
+        }
+
+        .merkleroot {
+        	margin: 15px auto;
+        	width: 280px;
+        }
+
+        .hashblock {
+        	margin: 15px 135px;
+        	display: inline-block;
+        	width: 280px;
+        }
+
+        .tx {
+        	width: 280px;
+		    display: inline-block;
+		    margin: 20px auto;
+        }
+
+        .get-merkle-tree {
+            width: 330px;
+            height: 330px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 32px 42px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px -2px rgba(10,16,34,.4)
+        }
+        .get-merkle-tree:hover {
+            box-shadow: 0 0 50px 10px rgba(0, 0, 0, 0.1)
+        }
+
+		.input-group {
+			margin: 0 auto 10px 0;
+		}
+
+        .btn-addblock {
+            width: 168px;
+            height: 56px;
+            background-color: rgba(225, 71, 80, 0.9);
+            border-radius: 30px;
+            margin: 30px auto 0 auto;
+            display: block;
+            border: none;
+            outline: none;
+            font-weight: 700;
+        }
+
+        .btn-addblock:hover {
+            background-color: lightblue;
+        }
+
+
+        .ft-size-12 {
+            font-size: 12px;
+        }
+        .ant-card {
+            color: rgba(0, 0, 0, 0.3);
+        }
+        .ant-tag-green {
+            color: #52c41a;
+            background: #f6ffed;
+            display: inline-block;
+            border: 1px solid #b7eb8f;
+            padding: 0 7px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapse" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#" class="navbar-brand">BlockchainDemo</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/block">Block</a></li>
+                <li><a href="/blockchain">Blockchain</a></li>
+                <li><a href="/transaction">Transaction</a></li>
+                <li class="active"><a href="/merkleTree">MerkleTree</a></li>
+                <li><a href="#About">About</a></li>
+                <li><a href="https://github.com/TheStarBoys/blockchainDemo" target="_blank">MyProject</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="starter-template">
+        <h1 style="font-family: DINPro,-apple-system,BlinkMacSystemFont,
+             Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,
+             Helvetica Neue,sans-serif; font-size: 40pt;">Merkle Tree</h1>
+        <p class="lead">
+            The merckle tree is used to save trade sets.<br>
+        </p>
+    </div>
+
+
+    {{if .mNodes}}
+        <div>
+            <div class="merkleroot">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">MerkleRoot</span>
+                    <input type="text" class="form-control" placeholder="" aria-describedby="	basic-addon1" id="data" oninput="putHash()" value="{{index .mNodes 0}}">
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="hashblock">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">HASH12</span>
+                    <input type="text" class="form-control" placeholder="" aria-describedby="	basic-addon1" id="data" oninput="putHash()" value="{{index .mNodes 1}}">
+                </div>
+            </div>
+            <div class="hashblock">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">HASH34</span>
+                    <input type="text" class="form-control" placeholder="" aria-describedby="	basic-addon1" id="data" oninput="putHash()" value="{{index .mNodes 2}}">
+                </div>
+            </div>
+        </div>
+        <!--交易-->
+        <div class="tx">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">DATA1</span>
+                <input type="text" class="form-control" placeholder="" aria-describedby="	basic-addon1" id="data" oninput="putHash()" value="{{index .mNodes 3}}">
+            </div>
+        </div>
+        <div class="tx">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">DATA2</span>
+                <input type="text" class="form-control" placeholder="" aria-describedby="	basic-addon1" id="data" oninput="putHash()" value="{{index .mNodes 4}}">
+            </div>
+        </div>
+        <div class="tx">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">DATA3</span>
+                <input type="text" class="form-control" placeholder="" aria-describedby="	basic-addon1" id="data" oninput="putHash()" value="{{index .mNodes 5}}">
+            </div>
+        </div>
+        <div class="tx">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">DATA4</span>
+                <input type="text" class="form-control" placeholder="" aria-describedby="	basic-addon1" id="data" oninput="putHash()" value="{{index .mNodes 6}}">
+            </div>
+        </div>
+        {{else}}
+        <div>
+            <div class="merkleroot">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">MerkleRoot</span>
+                    <input type="text" class="form-control" placeholder="" aria-describedby="	basic-addon1" id="data" oninput="putHash()" value="52ec3a857819c650f9da30d7d0132cd861f08e1be09dc6d3fe5f9cd638df857f">
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="hashblock">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">HASH12</span>
+                    <input type="text" class="form-control" placeholder="" aria-describedby="	basic-addon1" id="data" oninput="putHash()" value="055987cb54e20102ec81b29ad53ad769b3e3c62527a5591033bd437ac164a4e6">
+                </div>
+            </div>
+            <div class="hashblock">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">HASH34</span>
+                    <input type="text" class="form-control" placeholder="" aria-describedby="	basic-addon1" id="data" oninput="putHash()" value="9cc8ac8e0654851e3ee7d4070e9b838886a12da34b1541d32c4a095ba31ab541">
+                </div>
+            </div>
+        </div>
+        <!--交易-->
+        <div class="tx">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">DATA1</span>
+                <input type="text" class="form-control" placeholder="" aria-describedby="	basic-addon1" id="data" oninput="putHash()" value="80a947fd9f291af3dc29b883c2f95d162e151a23b176fb0370ceac3fda3e7cac">
+            </div>
+        </div>
+        <div class="tx">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">DATA2</span>
+                <input type="text" class="form-control" placeholder="" aria-describedby="	basic-addon1" id="data" oninput="putHash()" value="f07558c1bd93e21bf1488fdd4ead2819b9335c4c540ccbd3ceb1cae4639afcf5">
+            </div>
+        </div>
+        <div class="tx">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">DATA3</span>
+                <input type="text" class="form-control" placeholder="" aria-describedby="	basic-addon1" id="data" oninput="putHash()" value="9ef01c164ee5422a4a4350d55a9a1204c4d4b2a12d126a1ceb073e53ba8f399b">
+            </div>
+        </div>
+        <div class="tx">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">DATA4</span>
+                <input type="text" class="form-control" placeholder="" aria-describedby="	basic-addon1" id="data" oninput="putHash()" value="2230b8f76367fff5feeb119a76bfc3f5c811b6159c0f3447d416be5f66745b56">
+            </div>
+        </div>
+    {{end}}
+
+    </div>
+    <!-- AddTX -->
+    <form action="#end-page" method="post" target="">
+        <div class="get-merkle-tree">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">DATA1</span>
+                <input type="text" id="data1" class="form-control" placeholder="" aria-describedby="basic-addon1"
+                       value="Send 1BTC to B from A" name="data1">
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">DATA2</span>
+                <input type="text" id="data2" class="form-control" placeholder="" aria-describedby="basic-addon1"
+                       value="Send 3BTC to C from B" name="data2">
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">DATA3</span>
+                <input type="text" id="data3" class="form-control" placeholder="" aria-describedby="basic-addon1"
+                       value="Send 2BTC to A from C" name="data3">
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">DATA4</span>
+                <input type="text" id="data4" class="form-control" placeholder="" aria-describedby="basic-addon1"
+                       value="Send 4BTC to D from B" name="data4">
+            </div>
+            <button class="btn-addblock" type="submit" style="color: #fff;">
+            GET MERKLE TREE</button>
+        </div>
+    </form>
+    <iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
+    <a id="end-page"></a>
+</div>
+<script>
+
+</script>
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="../static/js/bootstrap.min.js"></script>
+<script src="../static/js/SHA-256.js"></script>
+</body>
+</html>
