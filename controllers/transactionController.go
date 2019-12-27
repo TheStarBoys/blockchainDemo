@@ -15,22 +15,6 @@ func (this *TransactionController)Get() {
 	// 创建区块链 不会让bc一直存储在服务器中
 	bc2 = blockchain_v2.NewBlockChain("Alice")
 	bc2.GetBalance("Alice") // 12.5
-	//tx := blockchain_v2.NewTransaction("Alice", "Bob", 5,bc2) //
-	//
-	//coinbase := blockchain_v2.NewCoinbaseTx("Alice","")
-	//bc2.AddBlock([]*blockchain_v2.Transaction{coinbase,tx})
-
-	// 把所有账户集合放到"account" session里
-	//var accounts []string
-	//accounts = append(accounts, "Alice")
-	//this.SetSession("accounts",accounts)
-	//amounts := bc2.GetBalanceByAccounts(accounts)
-	//for _, account := range accounts {
-	//	balance := amounts[account]
-	//	// 把accoutn : balance 存到session里
-	//	this.SetSession(account, balance)
-	//}
-	//accounts = this.GetSession("accounts").([]string)
 	// 清空切片
 	accounts = accounts[:0]
 	accounts = append(accounts, &models.Account{Name:"Alice",Amount:bc2.GetBalance("Alice")})
