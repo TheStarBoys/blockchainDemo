@@ -1,6 +1,7 @@
-package blockchain_v3
+package main
 
 import (
+	"bytes"
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
@@ -85,4 +86,16 @@ func checksum(payload []byte) []byte {
 
 	// 只取前四个字节
 	return secondSHA[:addressChecksumLen]
+}
+
+// ValidateAddress 检测地址是否有效
+func ValidateAddress(address string) bool {
+	pubKeyHash := Base58Decode([]byte(address))
+	if len(pubKeyHash) < addressChecksumLen {
+		return false
+	}
+	actualChecksum := pubKeyHash[len(pubKeyHash)-addressChecksumLen:]
+	targetChecksum := checksum(pubKeyHash[:len(pubKeyHash)-addressChecksumLen])
+
+	return bytes.Compare(targetChecksum, actualChecksum) == 0
 }

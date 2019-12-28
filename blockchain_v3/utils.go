@@ -1,4 +1,4 @@
-package blockchain_v3
+package main
 
 import (
 	"bytes"

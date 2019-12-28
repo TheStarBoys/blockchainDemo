@@ -52,10 +52,10 @@ func (bc *BlockChain)PrintChain() {
 		//fmt.Printf("Data:			%s\n",block.Data)
 		fmt.Println("~~~~~~~~ Transactions ~~~~~~~")
 		for _, tx := range block.Transactions {
-			fmt.Printf("TXID:		%x\n", tx.TXID)
+			fmt.Printf("ID:		%x\n", tx.TXID)
 			fmt.Println("********** TXInputs **********")
 			for _, input := range tx.TXInputs {
-				fmt.Printf("TXID: 	%x\n",input.TXID)
+				fmt.Printf("ID: 	%x\n",input.TXID)
 				fmt.Printf("Vout: 	%d\n",input.Vout)
 				fmt.Printf("ScriptSig: 	%s\n",input.ScriptSig)
 				fmt.Println("#########")
@@ -200,8 +200,14 @@ func (bc *BlockChain)GetBalance(address string) (balance float64){
 	return total
 }
 // 进行转账
-func (bc *BlockChain)Send(from, to string, amount float64) {
+func (bc *BlockChain)Send(miner, data, from, to string, amount float64) bool {
+	coinbase := NewCoinbaseTx(miner, data)
 	tx := NewTransaction(from, to, amount, bc)
-	bc.AddBlock([]*Transaction{tx})
+	if tx == nil {
+		return false
+	}
+	bc.AddBlock([]*Transaction{coinbase, tx})
 	beego.Info("send successfully!")
+
+	return true
 }

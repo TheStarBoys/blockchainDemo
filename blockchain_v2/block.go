@@ -37,7 +37,6 @@ func NewBlock(txs []*Transaction, prevHash []byte) *Block {
 func NewGenesisBlock(coinbase *Transaction) *Block{
 	genesis := NewBlock([]*Transaction{coinbase}, []byte{})
 	genesis.HashTransactions()
-	//return NewBlock("Welcome to Blockchain Demo by TheStarBoys" /*+ time.Now().Format(time.UnixDate)*/,[]byte{})
 	return genesis
 }
 //粗略模拟merkle tree，将交易的哈希值进行拼接，生成root hash

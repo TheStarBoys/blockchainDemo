@@ -26,4 +26,8 @@ func TestTransaction(t *testing.T) {
 	if balance != (12.5 * 2) - 5 {
 		t.Errorf("Alice have %f BTC, expected: %d", balance, 20)
 	}
+
+	if bc.Send("Alice", "Failed data", "Ivan", "Bob", 5) == true {
+		t.Errorf("Send Error, Ivan not have enough money, expected: %v", false)
+	}
 }
