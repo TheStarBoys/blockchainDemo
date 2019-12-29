@@ -99,37 +99,37 @@ func NewBlockchain(nodeID string) *Blockchain {
 }
 
 // AddBlock 保存区块到区块链中
+// 下面代码顺序不能变，因为会出现从最新块开始接收节点传来的区块数据
+// 认为中心节点是受信任的，不对区块数据进行验证，直接添加
 func (bc *Blockchain) AddBlock(block *Block) {
 	err := bc.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(blocksBucket))
-
 		blockInDb := b.Get(block.Hash)
+		// 不允许添加已存在的区块到数据库中
 		if blockInDb != nil {
-			// block already exist, just ignore
 			return nil
 		}
-
-		lastBlockHash := b.Get([]byte("l"))
-		lastBlockData := b.Get(lastBlockHash)
+		// 添加区块到数据库
+		blockData := block.Serialize()
+		err := b.Put(block.Hash, blockData)
+		if err != nil {
+			log.Panic(err)
+		}
+		// 获取最后一个区块
+		lastHash := b.Get([]byte("l"))
+		lastBlockData := b.Get(lastHash)
 		lastBlock := DeserializeBlock(lastBlockData)
-		if lastBlock.Height > block.Height {
-			return fmt.Errorf("block height error, lastBlockHeight: %v > blockHeight: %v", lastBlock.Height, block.Height)
+		// 更新存储最后一个区块的哈希
+		if block.Height > lastBlock.Height {
+			err = b.Put([]byte("l"), block.Hash)
+			if err != nil {
+				log.Panic(err)
+			}
+			bc.tip = block.Hash
 		}
-
-		err := b.Put(block.Hash, block.Serialize())
-		if err != nil {
-			return err
-		}
-		err = b.Put([]byte("l"), block.Hash)
-		if err != nil {
-			return err
-		}
-
-		bc.tip = block.Hash
 
 		return nil
 	})
-
 	if err != nil {
 		log.Panic(err)
 	}
