@@ -89,13 +89,27 @@ func (tx *Transaction) Sign(privKey ecdsa.PrivateKey, prevTXs map[string]Transac
 	}
 }
 
-// todo 待测试
 func (tx *Transaction) TrimmedCopy() Transaction {
-	txCopy := *tx
-	for _, vin := range txCopy.Vin {
-		vin.PubKey = nil
-		vin.Signature = nil
+	// 以下做法被证实是错误的
+	// vin.PubKey 与 vin.Signature 并未清空。 := range 得到的value是值类型
+	//txCopy1 := *tx
+	//for _, vin := range txCopy1.Vin {
+	//	vin.PubKey = nil
+	//	vin.Signature = nil
+	//}
+
+	var inputs []TXInput
+	var outputs []TXOutput
+
+	for _, vin := range tx.Vin {
+		inputs = append(inputs, TXInput{vin.TXID, vin.Vout, nil, nil})
 	}
+
+	for _, vout := range tx.Vout {
+		outputs = append(outputs, TXOutput{vout.Value, vout.PubKeyHash})
+	}
+
+	txCopy := Transaction{tx.ID, inputs, outputs}
 
 	return txCopy
 }
@@ -134,6 +148,7 @@ func (tx *Transaction) Verify(prevTXs map[string]Transaction) bool {
 		dataToVerify := fmt.Sprintf("%x\n", txCopy)
 		rawPubKey := ecdsa.PublicKey{Curve: curve, X: &x, Y: &y}
 		if ecdsa.Verify(&rawPubKey, []byte(dataToVerify), &r, &s) == false {
+			fmt.Printf("ERROR: Transaction signature is not correct\n")
 			return false
 		}
 

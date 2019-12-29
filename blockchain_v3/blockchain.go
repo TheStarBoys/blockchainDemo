@@ -164,14 +164,10 @@ func (bc *Blockchain) FindUTXO() map[string]TXOutputs {
 
 	for {
 		block := it.Next()
-		fmt.Printf("block: %#v\n", block)
+
 
 		for _, tx := range block.Transactions {
-			fmt.Printf("tx: %#v\n", *tx)
-		}
-		for _, tx := range block.Transactions {
 			txID := hex.EncodeToString(tx.ID)
-			fmt.Printf("tx.ID: %d, txID: %s\n", len(tx.ID), txID)
 
 		Outputs:
 			for outIdx, output := range tx.Vout {
@@ -201,7 +197,6 @@ func (bc *Blockchain) FindUTXO() map[string]TXOutputs {
 		}
 	}
 
-	fmt.Printf("UTXO: %#v, spentTXOs: %#v\n", UTXO, spentTXOs)
 	return UTXO
 }
 
