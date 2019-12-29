@@ -351,8 +351,9 @@ func handleTx(request []byte, bc *Blockchain) {
 			}
 		}
 	} else {
+		fmt.Printf("mempool length: %v, miner: %v\n", len(mempool), len(miningAddress) > 0)
 		if len(mempool) >= minTxNum && len(miningAddress) > 0 {
-		//MineTransactions:
+		MineTransactions:
 			var txs []*Transaction
 			for _, tx := range mempool {
 				if bc.VerifyTransaction(&tx) {
@@ -385,9 +386,9 @@ func handleTx(request []byte, bc *Blockchain) {
 				}
 			}
 
-			//if len(mempool) > 0 {
-			//	goto MineTransactions
-			//}
+			if len(mempool) > 0 {
+				goto MineTransactions
+			}
 		}
 	}
 }

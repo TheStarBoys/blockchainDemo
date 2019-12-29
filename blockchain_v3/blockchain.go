@@ -105,14 +105,15 @@ func (bc *Blockchain) AddBlock(block *Block) {
 
 		blockInDb := b.Get(block.Hash)
 		if blockInDb != nil {
-			return fmt.Errorf("block already exist")
+			// block already exist, just ignore
+			return nil
 		}
 
 		lastBlockHash := b.Get([]byte("l"))
 		lastBlockData := b.Get(lastBlockHash)
 		lastBlock := DeserializeBlock(lastBlockData)
-		if lastBlock.Height < block.Height {
-			return fmt.Errorf("block height error")
+		if lastBlock.Height > block.Height {
+			return fmt.Errorf("block height error, lastBlockHeight: %v > blockHeight: %v", lastBlock.Height, block.Height)
 		}
 
 		err := b.Put(block.Hash, block.Serialize())
@@ -213,7 +214,8 @@ func (bc *Blockchain) GetBestHeight() int {
 	var lastBlock *Block
 	err := bc.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(blocksBucket))
-		lastBlockData := b.Get([]byte("l"))
+		lastBlockHash := b.Get([]byte("l"))
+		lastBlockData := b.Get(lastBlockHash)
 		lastBlock = DeserializeBlock(lastBlockData)
 
 		return nil
@@ -294,7 +296,7 @@ func (bc *Blockchain) MineBlock(transactions []*Transaction) *Block {
 		log.Panic(err)
 	}
 
-	newBlock := NewBlock(transactions, lastBlockHash, lastBlockHeight)
+	newBlock := NewBlock(transactions, lastBlockHash, lastBlockHeight+1)
 
 	err = bc.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(blocksBucket))

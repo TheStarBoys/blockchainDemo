@@ -41,7 +41,7 @@ func (tx Transaction) Serialize() []byte {
 func DeserializeTransation(data []byte) Transaction {
 	decoder := gob.NewDecoder(bytes.NewReader(data))
 	var tx Transaction
-	err := decoder.Decode(tx)
+	err := decoder.Decode(&tx)
 	if err != nil {
 		log.Panic(err)
 	}
