@@ -19,7 +19,7 @@ func init() {
 }
 
 
-// TestBeego is a sample to run an endpoint test
+// TestBeego is a sample to run.sh an endpoint test
 func TestBeego(t *testing.T) {
 	r, _ := http.NewRequest("GET", "/", nil)
 	w := httptest.NewRecorder()
