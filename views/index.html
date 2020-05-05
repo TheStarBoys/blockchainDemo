@@ -128,11 +128,13 @@
 
     {{/*GENESIS BLOCK*/}}
     {{with .Genesis}}
+    {{/*定位到对应哈希的区块*/}}
+    <a name="hash_{{.Hash | printf "%x"}}" style="position: relative;top: -250px;"></a>
     <div class="block" onload="">
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">DATA</span>
-            <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1"
-                   value="{{.Data | printf "%s"}}">
+            <input class="form-control" placeholder="" aria-describedby="basic-addon1"
+                   value="{{.Data | printf "%s"}}" disabled="disabled">
         </div>
         <p style="margin-top: 22px" class="ft-size-12">PREVIOUS HASH
             <span style="color: #52c41a;">0</span>
@@ -150,18 +152,24 @@
     {{/*BLOCK# BEGIN*/}}
     {{/*隐藏域 用于传递数据*/}}
     {{range $i, $b := .Blocks}}
+    {{/*定位到对应哈希的区块*/}}
+    <a id="target_{{$i | AddOne}}" name="hash_{{.Hash | printf "%x"}}" style="position: relative;top: -50px;"></a>
     <div style="text-align: center;">
         <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"
               style="font-size: 40px; color: rgba(0,0,0,0.5);"></span>
     </div>
-    <div class="block">
+    <div id="block_{{$i | AddOne}}" class="block">
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">DATA</span>
-            <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" onchange="dataChange()"
+            <input id="data_{{$i | AddOne}}" type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" oninput="dataChange()"
                    value="{{.Data | printf "%s"}}">
         </div>
-        <p style="margin-top: 22px" class="ft-size-12">PREVIOUS HASH <span style="color: #52c41a;">0x{{.PrevBlockHash | printf "%x"}}</span></p>
-        <p style="margin-top: 10px" class="ft-size-12">HASH <span class="ant-tag-green" style="color: #52c41a;">0x{{.Hash | printf "%x"}}</span>
+        <p style="margin-top: 22px" class="ft-size-12">PREVIOUS HASH
+            <a href="#hash_{{.PrevBlockHash | printf "%x"}}"><span style="color: #52c41a;">0x{{.PrevBlockHash | printf "%x"}}</span></a>
+        </p>
+
+        <p style="margin-top: 10px" class="ft-size-12">HASH
+            <span id="hash_{{$i | AddOne}}" class="ant-tag-green" style="color: #52c41a;">0x{{.Hash | printf "%x"}}</span>
         </p>
         <div class="clearfix" style="height: 54px">
             {{/*executing "index.html" at <AddOne>: wrong type for value; expected string; got int*/}}
@@ -193,6 +201,36 @@
 <script>
     // 当block的input内容改变时
     function dataChange() {
+        var curElement = window.event.srcElement; // 触发方法的HTML元素
+        var num = curElement.id.split('_')[1]; // 区块编号
+        var hashId = 'hash_' + num;
+        var hashElement = document.getElementById(hashId);
+        // console.log(hashElement);
+        // console.log(curElement.value);
+        // console.log(num);
+        // console.log(this)
+        // var data = document.getElementById("data");
+        // var hash = document.getElementById("hash");
+        // // 要进行hash运算的数据
+        var text = curElement.value;
+        console.log(text);
+        const sha = hex_sha256(text);
+        hashElement.innerHTML = "0x" + sha;
+        // console.log(hashElement);
+        // console.log(sha);
+
+        // 清除当前区块的锚点
+        var targetId = 'target_' + num;
+        var target = document.getElementById(targetId);
+        target.name = "error_hash_" + num;
+
+        // 将后续区块置为红色
+        var blockId = 'block_' + ++num;
+        var block = document.getElementById(blockId);
+        // block.style.backgroundColor = '#eb4949';
+        for (; block; blockId = 'block_' + ++num, block = document.getElementById(blockId)) {
+            block.style.backgroundColor = 'rgba(225, 71, 80, 0.9)';
+        }
     }
 </script>
 
@@ -200,5 +238,6 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script src="../static/js/bootstrap.min.js"></script>
+<script src="../static/js/SHA-256.js"></script>
 </body>
 </html>

@@ -107,9 +107,9 @@
         </p>
         <div class="clearfix" style="height: 54px">
             <h3 class="pull-left">BLOCK
-                <small style="font-size: 8pt;" class="ant-card">2019/5/23</small>
+                <small id="timestamp" style="font-size: 8pt;" class="ant-card">Tue, 05 May 2020 17:39:24 GMT</small>
             </h3>
-            <span class="label label-info pull-right" style="margin-top: 26px;">999</span>
+            <span id="nonce" class="label label-info pull-right" style="margin-top: 26px;">999</span>
         </div>
     </div>
 
@@ -119,7 +119,6 @@
 </div>
 <script>
     var data = document.getElementById("data");
-    var hash = document.getElementById("hash");
     function putHash() {
         // 要进行hash运算的数据
         var text = data.value;
@@ -129,34 +128,38 @@
         //     console.log(hexString(digestValue));
         //     hash.innerHTML = "0x" + hexString(digestValue);
         // });
-        const sha = hex_sha256(text);
-        hash.innerHTML = "0x" + sha;
+
+        // prepare data
+        var date=new Date();
+        var curStamp = date.getTime();
+        console.log("curStamp: ", curStamp);
+        var sha = "";
+        var targetBits = 2;
+        console.log("targetValue: ", targetBits);
+
+        for (var nonce = 0; nonce < 1 << 31-1; nonce++) {
+            sha = hex_sha256(curStamp + nonce + text);
+            console.log("sha:", sha);
+            if (sha.slice(0, targetBits) == 0) {
+                // 更新区块值
+
+                // 更新nonce值
+                var nonceElem = document.getElementById("nonce");
+                nonceElem.innerHTML = "" + nonce;
+
+                // 更新时间戳值
+                var timestamp = document.getElementById("timestamp");
+                timestamp.innerHTML = "" + date.toUTCString();
+
+                // 更新哈希值
+                var hash = document.getElementById("hash");
+                hash.innerHTML = "0x" + sha;
+                break
+            }
+        }
+
         console.log(sha);
     }
-    // 将byteArray转为十六进制显示
-    // function hexString(buffer) {
-    // var byteArray = new Uint8Array(buffer);
-    //
-    // var hexCodes = [...byteArray].map(value => {
-    // var hexCode = value.toString(16);
-    // var paddedHexCode = hexCode.padStart(2, '0');
-    // return paddedHexCode;
-    // });
-
-    // return hexCodes.join('');
-    // }
-    // 要进行hash运算的数据
-    // var text = 'Welcome to Blockchain Demo by TheStarBoys';
-    // 进行hash运算
-    // function digestMessage(message) {
-    // var encoder = new TextEncoder();
-    // var data = encoder.encode(message);
-    // return window.crypto.subtle.digest('SHA-256', data);
-    // }
-
-    // digestMessage(text).then(digestValue => {
-    // console.log(hexString(digestValue));
-    // });
 </script>
 
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
@@ -164,5 +167,6 @@
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script src="../static/js/bootstrap.min.js"></script>
 <script src="../static/js/SHA-256.js"></script>
+<script src="../static/js/bi.js"></script>
 </body>
 </html>
