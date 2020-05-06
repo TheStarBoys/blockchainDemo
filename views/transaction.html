@@ -158,6 +158,7 @@
     <div class="block" onload="">
     {{/* SEND BTC FROM "" TO ""*/}}
     {{range $txs}}
+        <a name="txid_{{.TXID | printf "0x%x"}}" style="position: relative;top: -110px;"></a>
         <span>TXID: {{.TXID | printf "0x%x"}}</span>
         <div class="tx">
         {{/* inputs */}}
@@ -222,6 +223,7 @@
     <div class="block">
         {{/* SEND BTC FROM "" TO ""*/}}
         {{range .Transactions}}
+            <a name="txid_{{.TXID | printf "0x%x"}}" style="position: relative;top: -110px;"></a>
             <span>TXID: {{.TXID | printf "0x%x"}}</span>
             <div class="tx">
             {{/* inputs */}}
@@ -237,7 +239,9 @@
 
                 {{range .TXInputs}}
                 <tr>
-                    <td style="font-size: 12px">{{.TXID | printf "%x"}}</td>
+                    <td style="font-size: 12px">
+                        <a href="#txid_{{.TXID | printf "0x%x"}}">{{.TXID | printf "0x%x"}}</a>
+                    </td>
                     <td>{{.ScriptSig}}</td>
                 </tr>
                 {{end}}
