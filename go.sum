@@ -1,0 +1,4 @@
+github.com/astaxie/beego v1.7.1 h1:TuqX4F9e3ujVEycudgWrwUj11WMppLZyunJKIBoxTFw=
+github.com/astaxie/beego v1.7.1/go.mod h1:0R4++1tUqERR0WYFWdfkcrsyoVBCG4DgpDGokT3yb+U=
+golang.org/x/crypto v0.1.0 h1:MDRAIl0xIo9Io2xV565hzXHw3zVseKrJKodhohM5CjU=
+golang.org/x/crypto v0.1.0/go.mod h1:RecgLatLF4+eUMCP1PoPZQb+cVrJcOPbHkTkbkB9sbw=
